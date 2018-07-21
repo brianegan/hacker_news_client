@@ -9,6 +9,7 @@ import 'package:hacker_news_client/src/models/serializers.dart';
 
 part 'user.g.dart';
 
+/// A Hacker News Users
 abstract class User implements Built<User, UserBuilder> {
   User._();
 

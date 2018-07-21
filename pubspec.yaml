@@ -1,7 +1,7 @@
 name: hacker_news_client
 description: A client for the Hacker News API. Works on Flutter, Server, and Web.
 version: 0.1.0
-homepage: https://www.example.com
+homepage: https://github.com/brianegan/hacker_news_client
 author: Brian Egan <brian@brianegan.com>
 
 environment:

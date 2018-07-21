@@ -11,6 +11,7 @@ import 'package:hacker_news_client/src/models/story_type.dart';
 
 part 'story.g.dart';
 
+/// A Story can represent a Story, Ask Hacker News Post, Show Hacker News Post.
 abstract class Story implements Built<Story, StoryBuilder> {
   Story._();
 

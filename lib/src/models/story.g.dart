@@ -34,6 +34,8 @@ class _$StorySerializer implements StructuredSerializer<Story> {
       serializers.serialize(object.kids,
           specifiedType:
               const FullType(BuiltList, const [const FullType(int)])),
+      'score',
+      serializers.serialize(object.score, specifiedType: const FullType(int)),
       'time',
       serializers.serialize(object.time,
           specifiedType: const FullType(DateTime)),
@@ -47,19 +49,6 @@ class _$StorySerializer implements StructuredSerializer<Story> {
         ..add(serializers.serialize(object.descendants,
             specifiedType: const FullType(int)));
     }
-    if (object.comments != null) {
-      result
-        ..add('comments')
-        ..add(serializers.serialize(object.comments,
-            specifiedType:
-                const FullType(BuiltList, const [const FullType(Comment)])));
-    }
-    if (object.score != null) {
-      result
-        ..add('score')
-        ..add(serializers.serialize(object.score,
-            specifiedType: const FullType(int)));
-    }
     if (object.title != null) {
       result
         ..add('title')
@@ -71,6 +60,13 @@ class _$StorySerializer implements StructuredSerializer<Story> {
         ..add('url')
         ..add(serializers.serialize(object.url,
             specifiedType: const FullType(String)));
+    }
+    if (object.comments != null) {
+      result
+        ..add('comments')
+        ..add(serializers.serialize(object.comments,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(Comment)])));
     }
 
     return result;
@@ -105,11 +101,6 @@ class _$StorySerializer implements StructuredSerializer<Story> {
                       const FullType(BuiltList, const [const FullType(int)]))
               as BuiltList);
           break;
-        case 'comments':
-          result.comments.replace(serializers.deserialize(value,
-              specifiedType: const FullType(
-                  BuiltList, const [const FullType(Comment)])) as BuiltList);
-          break;
         case 'score':
           result.score = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
@@ -130,6 +121,11 @@ class _$StorySerializer implements StructuredSerializer<Story> {
           result.url = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'comments':
+          result.comments.replace(serializers.deserialize(value,
+              specifiedType: const FullType(
+                  BuiltList, const [const FullType(Comment)])) as BuiltList);
+          break;
       }
     }
 
@@ -147,8 +143,6 @@ class _$Story extends Story {
   @override
   final BuiltList<int> kids;
   @override
-  final BuiltList<Comment> comments;
-  @override
   final int score;
   @override
   final DateTime time;
@@ -158,6 +152,9 @@ class _$Story extends Story {
   final StoryType type;
   @override
   final String url;
+  @override
+  final BuiltList<Comment> comments;
+  int __numComments;
 
   factory _$Story([void updates(StoryBuilder b)]) =>
       (new StoryBuilder()..update(updates)).build();
@@ -167,19 +164,23 @@ class _$Story extends Story {
       this.descendants,
       this.id,
       this.kids,
-      this.comments,
       this.score,
       this.time,
       this.title,
       this.type,
-      this.url})
+      this.url,
+      this.comments})
       : super._() {
     if (by == null) throw new BuiltValueNullFieldError('Story', 'by');
     if (id == null) throw new BuiltValueNullFieldError('Story', 'id');
     if (kids == null) throw new BuiltValueNullFieldError('Story', 'kids');
+    if (score == null) throw new BuiltValueNullFieldError('Story', 'score');
     if (time == null) throw new BuiltValueNullFieldError('Story', 'time');
     if (type == null) throw new BuiltValueNullFieldError('Story', 'type');
   }
+
+  @override
+  int get numComments => __numComments ??= super.numComments;
 
   @override
   Story rebuild(void updates(StoryBuilder b)) =>
@@ -196,12 +197,12 @@ class _$Story extends Story {
         descendants == other.descendants &&
         id == other.id &&
         kids == other.kids &&
-        comments == other.comments &&
         score == other.score &&
         time == other.time &&
         title == other.title &&
         type == other.type &&
-        url == other.url;
+        url == other.url &&
+        comments == other.comments;
   }
 
   @override
@@ -218,12 +219,12 @@ class _$Story extends Story {
                                         descendants.hashCode),
                                     id.hashCode),
                                 kids.hashCode),
-                            comments.hashCode),
-                        score.hashCode),
-                    time.hashCode),
-                title.hashCode),
-            type.hashCode),
-        url.hashCode));
+                            score.hashCode),
+                        time.hashCode),
+                    title.hashCode),
+                type.hashCode),
+            url.hashCode),
+        comments.hashCode));
   }
 
   @override
@@ -233,12 +234,12 @@ class _$Story extends Story {
           ..add('descendants', descendants)
           ..add('id', id)
           ..add('kids', kids)
-          ..add('comments', comments)
           ..add('score', score)
           ..add('time', time)
           ..add('title', title)
           ..add('type', type)
-          ..add('url', url))
+          ..add('url', url)
+          ..add('comments', comments))
         .toString();
   }
 }
@@ -262,11 +263,6 @@ class StoryBuilder implements Builder<Story, StoryBuilder> {
   ListBuilder<int> get kids => _$this._kids ??= new ListBuilder<int>();
   set kids(ListBuilder<int> kids) => _$this._kids = kids;
 
-  ListBuilder<Comment> _comments;
-  ListBuilder<Comment> get comments =>
-      _$this._comments ??= new ListBuilder<Comment>();
-  set comments(ListBuilder<Comment> comments) => _$this._comments = comments;
-
   int _score;
   int get score => _$this._score;
   set score(int score) => _$this._score = score;
@@ -287,6 +283,11 @@ class StoryBuilder implements Builder<Story, StoryBuilder> {
   String get url => _$this._url;
   set url(String url) => _$this._url = url;
 
+  ListBuilder<Comment> _comments;
+  ListBuilder<Comment> get comments =>
+      _$this._comments ??= new ListBuilder<Comment>();
+  set comments(ListBuilder<Comment> comments) => _$this._comments = comments;
+
   StoryBuilder();
 
   StoryBuilder get _$this {
@@ -295,12 +296,12 @@ class StoryBuilder implements Builder<Story, StoryBuilder> {
       _descendants = _$v.descendants;
       _id = _$v.id;
       _kids = _$v.kids?.toBuilder();
-      _comments = _$v.comments?.toBuilder();
       _score = _$v.score;
       _time = _$v.time;
       _title = _$v.title;
       _type = _$v.type;
       _url = _$v.url;
+      _comments = _$v.comments?.toBuilder();
       _$v = null;
     }
     return this;
@@ -327,17 +328,18 @@ class StoryBuilder implements Builder<Story, StoryBuilder> {
               descendants: descendants,
               id: id,
               kids: kids.build(),
-              comments: _comments?.build(),
               score: score,
               time: time,
               title: title,
               type: type,
-              url: url);
+              url: url,
+              comments: _comments?.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'kids';
         kids.build();
+
         _$failedField = 'comments';
         _comments?.build();
       } catch (e) {

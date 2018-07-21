@@ -10,6 +10,8 @@ import 'package:hacker_news_client/src/models/story_type.dart';
 
 part 'comment.g.dart';
 
+/// A Comment on a Story, Poll, Ask Hacker News Question, or Show Hacker News
+/// Post
 abstract class Comment implements Built<Comment, CommentBuilder> {
   Comment._();
 

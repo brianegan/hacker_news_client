@@ -12,6 +12,7 @@ import 'package:hacker_news_client/src/models/story_type.dart';
 
 part 'poll.g.dart';
 
+/// A Poll with all options and comments included
 abstract class Poll implements Built<Poll, PollBuilder> {
   Poll._();
 

@@ -10,6 +10,11 @@ import 'package:hacker_news_client/src/models/story_type.dart';
 
 part 'summary.g.dart';
 
+/// Provides a Summary of a Story, Comment, Job, Poll, Ask Hacker News Post, or
+/// Show Hacker News post.
+///
+/// It is similar to a Story or Poll, but it does not contain a full list of
+/// comments for those objects nor does it include the poll options for polls.
 abstract class Summary implements Built<Summary, SummaryBuilder> {
   Summary._();
 

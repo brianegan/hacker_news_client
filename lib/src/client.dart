@@ -11,19 +11,43 @@ import 'package:hacker_news_client/src/models/summary.dart';
 import 'package:hacker_news_client/src/models/user.dart';
 import 'package:http/http.dart';
 
+/// A class that provides access to the the hacker news REST api.
+///
+/// ### Example
+///
+/// ```dart
+/// // Create a client and pass in an http.Client.
+/// //  - For Flutter & Server, use IOClient
+/// //  - For Web, use BrowserClient
+/// final client = HackerNewsClient(IOClient());
+///
+/// // Fetch the top stories. Does not include all comments.
+/// final topStories = await client.topStories();
+///
+/// // Fetch the newest stories. Does not include all comments
+/// final newStories = await client.newStories();
+///
+/// // Fetch a story with all comments
+/// final newStories = await client.story(8863);
+//```
 class HackerNewsClient {
   final Client httpClient;
 
   HackerNewsClient(this.httpClient);
 
+  /// Fetch the top hacker news posts
   Future<List<Summary>> topStories() => _summariesByType('topstories');
 
+  /// Fetch the newest stories posted to hacker news
   Future<List<Summary>> newStories() => _summariesByType('newstories');
 
+  /// Fetch the best stories posted on hacker news
   Future<List<Summary>> bestStories() => _summariesByType('beststories');
 
+  /// Fetch the top show hacker news posts
   Future<List<Summary>> showHackerNews() => _summariesByType('showstories');
 
+  /// Fetch the top ask hacker news posts
   Future<List<Summary>> askHackerNews() async {
     final response = await httpClient.get(typeUrl('askstories'));
 
@@ -37,6 +61,7 @@ class HackerNewsClient {
     }
   }
 
+  /// Fetch the id of the latest story posted to Hacker News
   Future<int> maxItem() async {
     final response = await httpClient
         .get('https://hacker-news.firebaseio.com/v0/maxitem.json');
@@ -44,6 +69,7 @@ class HackerNewsClient {
     return int.parse(response.body);
   }
 
+  /// Fetch Story Summaries in a paged fashion, starting at a given Item id.
   Future<List<Summary>> pagedSummaries(int firstItemId, {pageSize = 50}) =>
       summaries(List.generate<int>(pageSize, (i) => firstItemId - i));
 
@@ -53,6 +79,7 @@ class HackerNewsClient {
     return summaries.where((summary) => summary != null).toList();
   }
 
+  /// Fetch information about the comments provided and all children recursively
   Future<List<Comment>> comments(Iterable<int> ids) async {
     final topComments = await Future.wait(ids.map((id) => comment(id)));
 
@@ -67,6 +94,7 @@ class HackerNewsClient {
     }));
   }
 
+  /// Fetch the latest jobs posted to Hacker News
   Future<List<Job>> jobs() async {
     final response = await httpClient.get(typeUrl('jobstories'));
 
@@ -90,6 +118,11 @@ class HackerNewsClient {
     }
   }
 
+  /// Fetch a summary of a Story, Question, Comment, Ask Hacker News Question,
+  /// Job, or Show Hacker News Post.
+  ///
+  /// This is good for mobile list views where it's expensive to download all
+  /// of the comments associated with all posts
   Future<Summary> summary(int id) async {
     final response = await httpClient.get(itemUrl(id));
 
@@ -100,6 +133,8 @@ class HackerNewsClient {
     }
   }
 
+  /// Fetch a Story, Ask Hacker News Question, or Show Hacker News Post, with
+  /// all comments included.
   Future<Story> story(int id) async {
     final response = await httpClient.get(itemUrl(id));
 
@@ -118,12 +153,14 @@ class HackerNewsClient {
     }
   }
 
+  /// Fetch an individual comment without any children
   Future<Comment> comment(int id) async {
     final response = await httpClient.get(itemUrl(id));
 
     return Comment.fromJson(response.body);
   }
 
+  /// Fetch information about a hacker news user
   Future<User> user(String id) async {
     final response = await httpClient
         .get('https://hacker-news.firebaseio.com/v0/user/$id.json');
@@ -137,6 +174,7 @@ class HackerNewsClient {
     return Job.fromJson(response.body);
   }
 
+  /// Fetch a Poll with all available options and all of the comments
   Future<Poll> poll(int id) async {
     final response = await httpClient.get(itemUrl(id));
     final poll = Poll.fromJson(response.body);

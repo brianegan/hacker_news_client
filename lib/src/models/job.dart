@@ -9,6 +9,7 @@ import 'package:hacker_news_client/src/models/story_type.dart';
 
 part 'job.g.dart';
 
+/// A Job that has been posted to Hacker News
 abstract class Job implements Built<Job, JobBuilder> {
   Job._();
 

@@ -9,6 +9,8 @@ import 'package:hacker_news_client/src/models/story_type.dart';
 
 part 'poll_option.g.dart';
 
+/// An option for a poll. It contains a score that represents the number of
+/// votes on a particular option.
 abstract class PollOption implements Built<PollOption, PollOptionBuilder> {
   PollOption._();
 
