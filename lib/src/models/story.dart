@@ -25,10 +25,7 @@ abstract class Story implements Built<Story, StoryBuilder> {
 
   BuiltList<int> get kids;
 
-  @nullable
-  BuiltList<Comment> get comments;
-
-  @nullable
+  @memoized
   int get score;
 
   DateTime get time;
@@ -40,6 +37,23 @@ abstract class Story implements Built<Story, StoryBuilder> {
 
   @nullable
   String get url;
+
+  @nullable
+  BuiltList<Comment> get comments;
+
+  @nullable
+  @memoized
+  int get numComments {
+    return comments == null ? null : _countComments(comments);
+  }
+
+  static int _countComments(BuiltList<Comment> comments) {
+    if (comments == null) return 0;
+
+    return comments.fold(0, (prev, comment) {
+      return prev + 1 + _countComments(comment.comments);
+    });
+  }
 
   String toJson() {
     return json.encode(serializers.serializeWith(Story.serializer, this));
