@@ -1,0 +1,20 @@
+name: hacker_news_client
+description: A client for the Hacker News API. Works on Flutter, Server, and Web.
+version: 0.1.0
+homepage: https://www.example.com
+author: Brian Egan <brian@brianegan.com>
+
+environment:
+  sdk: '>=2.0.0-dev.50.0 <3.0.0'
+
+dependencies:
+  built_collection: ^3.1.1
+  built_value: ^5.5.3
+  http: ^0.11.3+17
+
+dev_dependencies:
+  test: ^1.0.0
+  build_runner: ^0.9.0
+  built_value_generator: ^5.5.3
+  coverage: 0.12.1
+
