@@ -71,7 +71,7 @@ class HackerNewsClient {
 
   /// Fetch Story Summaries in a paged fashion, starting at a given Item id.
   Future<List<Summary>> pagedSummaries(int firstItemId, {pageSize = 50}) =>
-      summaries(List.generate<int>(pageSize, (i) => firstItemId - i));
+      summaries(List<int>.generate(pageSize, (i) => firstItemId - i));
 
   Future<List<Summary>> summaries(List<int> ids) async {
     final summaries = await Future.wait(ids.map((id) => summary(id)));
